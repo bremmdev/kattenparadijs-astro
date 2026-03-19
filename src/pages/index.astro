@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import { sortImagesIntoColumns } from "../utils/sortIntoColumns";
+import Gallery from "../components/gallery/Gallery";
 
 const imageResponse = await getCollection("images");
 const images = imageResponse.map((image) => image.data);
@@ -13,60 +14,5 @@ console.log("hier", images);
 ---
 
 <MainLayout title="Kattenparadijs">
-  {
-    /* 
-        Each column is an array of images that should be displayed as a flex column, 
-        so we can use break-inside-avoid to prevent images from being taken out of their column
-        We render the layout twice, once for small screens (2 columns) and once for large screens (4 columns)
-        This way we don't have any layout shifts on page load and the images are displayed immediately without loading indicator 
-      */
-  }
-  <div class="columns-2 gap-5 md:hidden">
-    {
-      columnsMobile.map((column, idx) => (
-        <div class="flex flex-col gap-3 items-center break-inside-avoid">
-          {column.map((img, idx) => (
-            <div class="group relative cursor-pointer hover:opacity-95 hover:scale-105 transition-all duration-300">
-              <button>
-                <Image
-                  src={img.url}
-                  width={img.width / 2}
-                  height={img.height / 2}
-                  alt="kat"
-                  class="rounded-xl"
-                />
-              </button>
-            </div>
-          ))}
-        </div>
-      ))
-    }
-  </div>
-
-  {
-    /*each column is an array of images that should be displayed as a flex column, 
-      so we can use break-inside-avoid to prevent images from being taken out of their column*/
-  }
-
-  <div class="columns-4 gap-5 hidden md:block">
-    {
-      columnsDesktop.map((column, idx) => (
-        <div class="flex flex-col gap-3 items-center break-inside-avoid">
-          {column.map((img, idx) => (
-            <div class="group relative cursor-pointer hover:opacity-95 hover:scale-105 transition-all duration-300">
-              <button>
-                <Image
-                  src={img.url}
-                  width={img.width / 2}
-                  height={img.height / 2}
-                  alt="kat"
-                  class="rounded-xl"
-                />
-              </button>
-            </div>
-          ))}
-        </div>
-      ))
-    }
-  </div>
+  <Gallery cat={null} images={images} client:only="react" />;
 </MainLayout>

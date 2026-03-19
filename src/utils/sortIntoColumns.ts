@@ -1,4 +1,4 @@
-import { type ImageWithDimensions } from "./types";
+import { type ImageWithDimensions } from "../types/types";
 
 export const sortImagesIntoColumns = (
     images: Array<ImageWithDimensions>,

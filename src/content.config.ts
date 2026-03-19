@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { sanityClient } from './sanity';
 import { imageGroqQuery } from './utils/query';
-import { ImageSchema } from './utils/types';
+import { ImageSchema } from './types/types';
 
 const images = defineCollection({
     loader: async () => {

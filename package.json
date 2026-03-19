@@ -15,10 +15,15 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.1",
+    "@astrojs/react": "^5.0.1",
     "@sanity/client": "^7.17.0",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "astro": "^6.0.4",
     "groq": "^5.16.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.1",
     "wrangler": "^4.73.0"
   }
