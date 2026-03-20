@@ -1,0 +1,12 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import VideosOverview from "../components/videos/VideosOverview.tsx";
+import { sanityClient } from "../sanity";
+import { videoGroqQuery } from "../utils/query";
+
+const videos = await sanityClient.fetch(videoGroqQuery({ page: 0 }));
+---
+
+<MainLayout title="Kattenparadijs">
+  <VideosOverview videos={videos} client:load />
+</MainLayout>

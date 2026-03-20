@@ -1,23 +1,38 @@
-import { z } from "astro/zod";
+export interface Cat {
+    name: string;
+    birthDate: string;
+    passingDate?: string;
+    iconUrl: string;
+    nicknames: Array<string>;
+}
 
-export const CatSchema = z.object({
-    name: z.string(),
-    birthDate: z.string(),
-    passingDate: z.string().nullable(),
-    iconUrl: z.string(),
-    nicknames: z.array(z.string()),
-});
+export interface ImageWithDimensions {
+    cats: Array<Cat>;
+    width: number;
+    height: number;
+    id: string;
+    url: string;
+    takenAt?: string;
+    blurData: string;
+}
 
-export const ImageSchema = z.object({
-    cats: z.array(CatSchema),
-    width: z.number(),
-    height: z.number(),
-    id: z.string(),
-    url: z.string(),
-    takenAt: z.string().nullable(),
-    blurData: z.string(),
-    _createdAt: z.string(),
-});
+export interface Video {
+    cats: Array<Cat>;
+    id: string;
+    url: string;
+    width: number;
+    height: number;
+    takenAt?: string;
+}
 
-export type Cat = z.infer<typeof CatSchema>;
-export type ImageWithDimensions = z.infer<typeof ImageSchema>;
+export type CatName = "moos" | "norris" | "daantje" | "flynn";
+
+export interface SimilarCatPhoto {
+    id: string;
+    imageUrl: string;
+}
+
+export interface SimilarCatPhotoWithDimensions extends SimilarCatPhoto {
+    width: number;
+    height: number;
+}

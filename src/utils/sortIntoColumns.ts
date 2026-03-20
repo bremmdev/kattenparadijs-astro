@@ -1,4 +1,4 @@
-import { type ImageWithDimensions } from "../types/types";
+import { type ImageWithDimensions, type Video } from "../types/types";
 
 export const sortImagesIntoColumns = (
     images: Array<ImageWithDimensions>,
@@ -14,18 +14,17 @@ export const sortImagesIntoColumns = (
     return columns;
 };
 
+export const sortVideosIntoColumns = (
+    videos: Array<Video>,
+    columnCount: number
+) => {
+    //divide images into columns for masonry layout
+    const columns: Array<Array<Video>> = [[], [], []];
 
-// export const sortVideosIntoColumns = (
-//   videos: Array<Video>,
-//   columnCount: number
-// ) => {
-//   //divide images into columns for masonry layout
-//   const columns: Array<Array<Video>> = [[], [], []];
+    videos.forEach((video, idx) => {
+        columns[idx % columnCount].push(video);
+    });
 
-//   videos.forEach((video, idx) => {
-//     columns[idx % columnCount].push(video);
-//   });
-
-//   return columns;
-// };
+    return columns;
+};
 
