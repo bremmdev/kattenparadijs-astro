@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import PassingIcon from "./PassingIcon.astro";
+import PassingIcon from "./PassingIcon.tsx";
 const avatars = [
   { src: "/avatar/daantje.svg", path: "/daantje" },
   { src: "/avatar/flynn.svg", path: "/flynn", passedAway: true },
@@ -16,7 +16,9 @@ const avatars = [
     avatars.map((avatar) => {
       return (
         <a href={avatar.path} class="relative">
-          {avatar.passedAway && <PassingIcon class="absolute right-1 z-10" />}
+          {avatar.passedAway && (
+            <PassingIcon className="absolute right-1 z-10" />
+          )}
           <Image
             class={`${avatar.passedAway ? "opacity-50" : ""} transition-all duration-300 cursor-pointer hover:scale-110 hover:brightness-105`}
             src={avatar.src}

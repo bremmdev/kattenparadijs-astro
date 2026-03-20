@@ -3,7 +3,7 @@ import { sanityClient } from "../sanity";
 import { catGroqQuery, imageGroqQuery } from "../utils/query";
 import { type Cat } from "../types/types";
 import MainLayout from "../layouts/MainLayout.astro";
-import Gallery from "../components/gallery/Gallery";
+import CatOverview from "../components/cat/CatOverview.tsx";
 
 export async function getStaticPaths() {
   const cats: Array<Cat> = await sanityClient.fetch(catGroqQuery);
@@ -32,8 +32,9 @@ const imagesData = await sanityClient.fetch(
 ---
 
 <MainLayout title="Kattenparadijs">
-  <Gallery
+  <CatOverview
     cat={cat}
+    isDetail={true}
     images={imagesData.images}
     catImageCount={imagesData.count ?? 0}
     client:load
