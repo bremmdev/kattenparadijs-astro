@@ -13,16 +13,15 @@ type Props = {
     cat: Cat | null;
     isDetail?: boolean;
     images: Array<ImageWithDimensions>;
+    catImageCount: number;
 };
 
-const Gallery = ({ cat, isDetail, images }: Props) => {
+const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
     //Determine if we should fetch all images or only images of a specific cat
     let queryArg = undefined;
     if (isDetail) {
         queryArg = cat?.name ?? "all";
     }
-
-    const catImageCount = 0
 
     /* STATE */
     const [selectedImage, setSelectedImage] =

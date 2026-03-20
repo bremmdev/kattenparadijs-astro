@@ -16,7 +16,6 @@ export const imageGroqQuery = (args: GroqArgs) => {
             : "";
 
     return groq`{
-    "count": count(*[${queryFilter}]),  
     "images":
       *[${queryFilter}] | order(_createdAt desc)${range} {
       "cats": cat[]->{name, birthDate, passingDate, "iconUrl": icon.asset->url, nicknames},
@@ -25,6 +24,19 @@ export const imageGroqQuery = (args: GroqArgs) => {
       "width": img.asset->metadata.dimensions.width,
       "height": img.asset->metadata.dimensions.height,
       "blurData": img.asset->metadata.lqip,
+      "_createdAt": _createdAt,
       takenAt,
   }}`;
+};
+
+export const imageCountGroqQuery = ({ cat }: { cat?: string }) => {
+    //query for pictures with single cat
+    let queryFilter = cat ? `"${cat}" in cat[]->name && length(cat) == 1` : "";
+
+    if (cat === "all") {
+        queryFilter = `length(cat) > 1`;
+    }
+    return groq`{
+    "count": count(*[_type == "catimage" ${queryFilter ? `&& ${queryFilter}` : ""}]),
+  }`;
 };

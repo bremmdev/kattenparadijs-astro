@@ -1,18 +1,30 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
 import { sortImagesIntoColumns } from "../utils/sortIntoColumns";
 import Gallery from "../components/gallery/Gallery";
+import { sanityClient } from "../sanity";
+import { imageCountGroqQuery } from "../utils/query";
 
+/* LOAD IMAGES, SORT BY CREATION DATE AS CONTENT COLLECTION DOES NOT KEEP ORDER */
 const imageResponse = await getCollection("images");
-const images = imageResponse.map((image) => image.data);
-const columnsMobile = sortImagesIntoColumns(images, 2);
-const columnsDesktop = sortImagesIntoColumns(images, 4);
+const images = imageResponse
+  .map((image) => image.data)
+  .sort(
+    (a, b) =>
+      new Date(b._createdAt).getTime() - new Date(a._createdAt).getTime(),
+  );
 
-console.log("hier", images);
+
+/* GET IMAGE COUNT */
+const imageCountResponse = await sanityClient.fetch(imageCountGroqQuery({}));
 ---
 
 <MainLayout title="Kattenparadijs">
-  <Gallery cat={null} images={images} client:load />;
+  <Gallery
+    cat={null}
+    images={images}
+    catImageCount={imageCountResponse.count ?? 0}
+    client:load
+  />;
 </MainLayout>

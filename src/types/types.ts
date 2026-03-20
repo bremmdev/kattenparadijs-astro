@@ -1,6 +1,6 @@
 import { z } from "astro/zod";
 
-export const CatSchema= z.object({
+export const CatSchema = z.object({
     name: z.string(),
     birthDate: z.string(),
     passingDate: z.string().nullable(),
@@ -16,6 +16,7 @@ export const ImageSchema = z.object({
     url: z.string(),
     takenAt: z.string().nullable(),
     blurData: z.string(),
+    _createdAt: z.string(),
 });
 
 export type Cat = z.infer<typeof CatSchema>;
