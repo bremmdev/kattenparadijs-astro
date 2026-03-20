@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { type ImageWithDimensions } from "../../types/types";
-// import GalleryActions from "./GalleryActions";
+import { type ImageWithDimensions, type SimilarCatPhotoWithDimensions } from "../../types/types";
+import GalleryActions from "./GalleryActions.tsx";
 
 type Props = {
     img: ImageWithDimensions;
@@ -9,10 +9,13 @@ type Props = {
     >;
     hasPriority?: boolean;
     isLCP?: boolean;
+    onSimilarImages?: React.Dispatch<
+        React.SetStateAction<Array<SimilarCatPhotoWithDimensions>>
+    >;
 };
 
 const GalleryItem = (props: Props) => {
-    const { img, setSelectedImage, hasPriority, isLCP } = props;
+    const { img, setSelectedImage, hasPriority, isLCP, onSimilarImages } = props;
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const wasLongPressRef = useRef<boolean>(false);
     const [isLongPress, setIsLongPress] = useState<boolean>(false);
@@ -57,7 +60,7 @@ const GalleryItem = (props: Props) => {
 
     return (
         <div className="group relative cursor-pointer hover:opacity-95 hover:scale-105 transition-all duration-300" onPointerDown={handlePointerDown} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp} onContextMenu={handleContextMenu}>
-            {/* <GalleryActions isLongPress={isLongPress} takenAt={img.takenAt as string} cat={img.cats[0].name} isVideo={false} birthDate={hasMultipleCats ? undefined : img.cats[0].birthDate} onSimilarImages={onSimilarImages} isMultipleCats={hasMultipleCats} imageUrl={img.url} id={img.id as string} /> */}
+            <GalleryActions isLongPress={isLongPress} takenAt={img.takenAt as string} cat={img.cats[0].name} isVideo={false} birthDate={hasMultipleCats ? undefined : img.cats[0].birthDate} onSimilarImages={onSimilarImages} isMultipleCats={hasMultipleCats} imageUrl={img.url} id={img.id as string} />
             <button onClick={handleImageClick}>
                 <img
                     src={img.url}
