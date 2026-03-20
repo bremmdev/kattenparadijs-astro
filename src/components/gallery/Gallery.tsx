@@ -2,12 +2,12 @@ import { type ImageWithDimensions } from "../../types/types";
 import GalleryItem from "./GalleryItem.tsx";
 import React from "react";
 import Modal from "../UI/Modal.tsx";
-import SelectRandomCat from "../cat/SelectRandomCat.tsx";
+import SelectRandomCat from "./SelectRandomCat.tsx";
 import useHandleClickOutsideImage from "../../hooks/useHandleClickOutsideImage.tsx";
 import { sortImagesIntoColumns } from "../../utils/sortIntoColumns.ts";
 import Spinner from "../UI/Spinner.tsx";
 import { type Cat } from "../../types/types";
-import CatCount from "../cat/CatCount.tsx";
+import CatCount from "./CatCount.tsx";
 import { PAGE_SIZE } from "../../utils/constants.ts";
 
 type Props = {
