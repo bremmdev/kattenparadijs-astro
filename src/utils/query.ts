@@ -16,27 +16,41 @@ export const imageGroqQuery = (args: GroqArgs) => {
             : "";
 
     return groq`{
-    "images":
-      *[${queryFilter}] | order(_createdAt desc)${range} {
-      "cats": cat[]->{name, birthDate, passingDate, "iconUrl": icon.asset->url, nicknames},
-      "id":_id,
-      "url": img.asset->url,
-      "width": img.asset->metadata.dimensions.width,
-      "height": img.asset->metadata.dimensions.height,
-      "blurData": img.asset->metadata.lqip,
-      "_createdAt": _createdAt,
-      takenAt,
-  }}`;
+      "count": count(*[${queryFilter}]),  
+      "images":
+        *[${queryFilter}] | order(_createdAt desc)${range} {
+        "cats": cat[]->{name, birthDate, passingDate, "iconUrl": icon.asset->url, nicknames},
+        "id":_id,
+        "url": img.asset->url,
+        "width": img.asset->metadata.dimensions.width,
+        "height": img.asset->metadata.dimensions.height,
+        "blurData": img.asset->metadata.lqip,
+        takenAt,
+    }}`;
 };
 
-export const imageCountGroqQuery = ({ cat }: { cat?: string }) => {
-    //query for pictures with single cat
-    let queryFilter = cat ? `"${cat}" in cat[]->name && length(cat) == 1` : "";
-
-    if (cat === "all") {
-        queryFilter = `length(cat) > 1`;
-    }
-    return groq`{
-    "count": count(*[_type == "catimage" ${queryFilter ? `&& ${queryFilter}` : ""}]),
+export const catGroqQuery = groq`*[_type == "cat"]{
+    name,
+    birthDate,
+    passingDate,
+    "iconUrl": icon.asset->url,
+    nicknames
   }`;
+
+export const videoGroqQuery = (args: GroqArgs) => {
+    const { page } = args;
+
+    const range =
+        page || page === 0
+            ? `[${page * PAGE_SIZE}...${(page + 1) * PAGE_SIZE}]`
+            : "";
+
+    return groq`*[_type == "catvideo"] | order(_createdAt desc) {
+      "cats": cat[]->{name, birthDate, "iconUrl": icon.asset->url, nicknames},
+      "id":_id,
+      "url":video.asset->url,
+      width,
+      height,
+      takenAt
+    }${range}`;
 };

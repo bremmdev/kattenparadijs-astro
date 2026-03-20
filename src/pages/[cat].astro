@@ -1,0 +1,41 @@
+---
+import { sanityClient } from "../sanity";
+import { catGroqQuery, imageGroqQuery } from "../utils/query";
+import { type Cat } from "../types/types";
+import MainLayout from "../layouts/MainLayout.astro";
+import Gallery from "../components/gallery/Gallery";
+
+export async function getStaticPaths() {
+  const cats: Array<Cat> = await sanityClient.fetch(catGroqQuery);
+
+  // Add an extra path for the page that has photos with multiple cats
+  return [
+    { params: { cat: "all" } },
+    ...cats.map((cat) => ({ params: { cat: cat.name }, props: { cat: cat } })),
+  ];
+}
+
+const { cat: catParam } = Astro.params;
+const { cat } = Astro.props;
+
+//query for pictures with single cat
+let queryFilter = `"${catParam}" in cat[]->name && length(cat) == 1`;
+
+//query for pictures with multiple cats
+if (catParam === "all") {
+  queryFilter = `length(cat) > 1`;
+}
+
+const imagesData = await sanityClient.fetch(
+  imageGroqQuery({ page: 0, filter: queryFilter }),
+);
+---
+
+<MainLayout title="Kattenparadijs">
+  <Gallery
+    cat={cat}
+    images={imagesData.images}
+    catImageCount={imagesData.count ?? 0}
+    client:load
+  />
+</MainLayout>
