@@ -5,9 +5,10 @@ import Modal from "../UI/Modal.tsx";
 import SelectRandomCat from "../cat/SelectRandomCat.tsx";
 import useHandleClickOutsideImage from "../../hooks/useHandleClickOutsideImage.tsx";
 import { sortImagesIntoColumns } from "../../utils/sortIntoColumns.ts";
-// import FetchMoreBtn from "./FetchMoreBtn";
+import Spinner from "../UI/Spinner.tsx";
 import { type Cat } from "../../types/types";
 import CatCount from "../cat/CatCount.tsx";
+import { PAGE_SIZE } from "../../utils/constants.ts";
 
 type Props = {
     cat: Cat | null;
@@ -26,14 +27,17 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
     /* STATE */
     const [selectedImage, setSelectedImage] =
         React.useState<ImageWithDimensions | null>(null);
-
+    const [allImages, setAllImages] = React.useState<Array<ImageWithDimensions>>(images);
     const [columnsMobile, setColumnsMobile] = React.useState<
         Array<Array<ImageWithDimensions>>
     >(() => sortImagesIntoColumns(images, 2));
-
     const [columnsDesktop, setColumnsDesktop] = React.useState<
         Array<Array<ImageWithDimensions>>
     >(() => sortImagesIntoColumns(images, 4));
+    const [page, setPage] = React.useState(0);
+    const [isFetchingNextPage, setIsFetchingNextPage] = React.useState(false);
+
+    const hasMoreImages = (page + 1) * PAGE_SIZE < catImageCount;
 
     const modalRef = React.useRef<HTMLDivElement>(null);
 
@@ -51,12 +55,19 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
         }
     };
 
-    // React.useEffect(() => {
-    //     const columnsMobile = sortImagesIntoColumns(images, 2);
-    //     setColumnsMobile(columnsMobile);
-    //     const columnsDesktop = sortImagesIntoColumns(images, 4);
-    //     setColumnsDesktop(columnsDesktop);
-    // }, [data]);
+    async function fetchNextPage() {
+        console.log('fetching next page', page + 1);
+        setIsFetchingNextPage(true);
+        const catParam = cat === null ? "" : `&cat=${cat.name ?? "all"}`;
+        const nextImages = await fetch(`/api/images?page=${page + 1}${catParam}`);
+        const data = await nextImages.json();
+        const newImages = [...allImages, ...data.images];
+        setPage(page + 1);
+        setAllImages(newImages);
+        setColumnsMobile(sortImagesIntoColumns(newImages, 2));
+        setColumnsDesktop(sortImagesIntoColumns(newImages, 4));
+        setIsFetchingNextPage(false);
+    }
 
     // only on home page or all cats page as other pages have banner images
     const useLCPImage = !isDetail || queryArg === "all";
@@ -148,13 +159,19 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                     </div>
                 ))}
             </div>
-            {/* {hasNextPage && (
-        <FetchMoreBtn
-          isFetching={isFetching}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      )} */}
+
+            {hasMoreImages && (
+                <div className="flex justify-center my-6">
+                    <button
+                        className="flex gap-2 cursor-pointer rounded-xl text-slate-950 border-2 border-slate-600 bg-white py-2.5 px-5 transition-colors duration-300 hover:bg-slate-50 md:text-base"
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                    >
+                        {isFetchingNextPage ? "Loading..." : "Load more"}
+                        {isFetchingNextPage && <Spinner />}
+                    </button>
+                </div>)}
+
         </>
     );
 };

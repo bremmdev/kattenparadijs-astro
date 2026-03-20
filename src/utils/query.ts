@@ -1,5 +1,5 @@
 import groq from 'groq';
-const PAGE_SIZE = 48;
+import { PAGE_SIZE } from './constants.ts';
 
 type GroqArgs = {
     filter?: string;

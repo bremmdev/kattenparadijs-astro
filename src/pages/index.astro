@@ -1,7 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
-import { sortImagesIntoColumns } from "../utils/sortIntoColumns";
 import Gallery from "../components/gallery/Gallery";
 import { sanityClient } from "../sanity";
 import { imageCountGroqQuery } from "../utils/query";
@@ -14,7 +13,6 @@ const images = imageResponse
     (a, b) =>
       new Date(b._createdAt).getTime() - new Date(a._createdAt).getTime(),
   );
-
 
 /* GET IMAGE COUNT */
 const imageCountResponse = await sanityClient.fetch(imageCountGroqQuery({}));

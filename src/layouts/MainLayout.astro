@@ -16,11 +16,9 @@ const { title = "Kattenparadijs" } = Astro.props;
     <Font cssVariable="--font-poppins" preload />
     <title>{title}</title>
   </head>
-  <body class="font-handwriting">
+  <body class="font-sans">
     <Header />
-    <main
-      class="max-w-page-content mx-auto py-6 px-8 sm:px-12 sm:py-8 font-handwriting"
-    >
+    <main class="max-w-page-content mx-auto py-6 px-8 sm:px-12 sm:py-8">
       <slot />
     </main>
   </body>
