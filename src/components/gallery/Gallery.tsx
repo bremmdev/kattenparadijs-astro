@@ -56,7 +56,6 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
     };
 
     async function fetchNextPage() {
-        console.log('fetching next page', page + 1);
         setIsFetchingNextPage(true);
         const catParam = cat === null ? "" : `&cat=${cat?.name ?? "all"}`;
         const nextImages = await fetch(`/api/images?page=${page + 1}${catParam}`);

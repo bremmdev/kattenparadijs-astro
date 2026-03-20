@@ -65,8 +65,8 @@ const GalleryItem = (props: Props) => {
                     height={img.height / 2}
                     alt="kat"
                     className="rounded-xl"
-                // priority={hasPriority}
-                // fetchpriority={isLCP ? "high" : "auto"}
+                    loading={hasPriority ? "eager" : "lazy"}
+                    fetchPriority={isLCP ? "high" : "auto"}
                 />
             </button>
         </div>
