@@ -3,8 +3,9 @@ import "../styles/global.css";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import Header from "../components/layout/Header.astro";
-const { title = "Kattenparadijs" } = Astro.props;
 import BackToTop from "../components/UI/BackToTop.tsx";
+
+const { meta } = Astro.props;
 ---
 
 <html lang="nl">
@@ -16,8 +17,15 @@ import BackToTop from "../components/UI/BackToTop.tsx";
     <meta name="generator" content={Astro.generator} />
     <Font cssVariable="--font-dancing-script" preload />
     <Font cssVariable="--font-poppins" preload />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta property="og:title" content={meta.og.title} />
+    <meta property="og:description" content={meta.og.description} />
+    <meta property="og:image" content={meta.og.image} />
+    <meta property="og:image:width" content={meta.og.imageWidth} />
+    <meta property="og:image:height" content={meta.og.imageHeight} />
+    <meta property="og:image:alt" content={meta.og.imageAlt} />
     <ClientRouter />
-    <title>{title}</title>
   </head>
   <body class="font-sans">
     <Header />

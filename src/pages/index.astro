@@ -3,11 +3,13 @@ import MainLayout from "../layouts/MainLayout.astro";
 import Gallery from "../components/gallery/Gallery";
 import { sanityClient } from "../sanity";
 import { imageGroqQuery } from "../utils/query";
+import { metadata } from "../utils/metadata";
 
 const imagesData = await sanityClient.fetch(imageGroqQuery({ page: 0 }));
+const meta = metadata.index;
 ---
 
-<MainLayout title="Kattenparadijs">
+<MainLayout meta={meta}>
   <Gallery
     cat={null}
     images={imagesData.images}

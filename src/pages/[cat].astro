@@ -4,6 +4,8 @@ import { catGroqQuery, imageGroqQuery } from "../utils/query";
 import { type Cat } from "../types/types";
 import MainLayout from "../layouts/MainLayout.astro";
 import CatOverview from "../components/cat/CatOverview.tsx";
+import { getDetailMeta } from "../utils/metadata";
+import type { CatName } from "../types/types";
 
 export async function getStaticPaths() {
   const cats: Array<Cat> = await sanityClient.fetch(catGroqQuery);
@@ -29,9 +31,11 @@ if (catParam === "all") {
 const imagesData = await sanityClient.fetch(
   imageGroqQuery({ page: 0, filter: queryFilter }),
 );
+
+const meta = getDetailMeta(catParam as CatName | "all");
 ---
 
-<MainLayout title="Kattenparadijs">
+<MainLayout meta={meta}>
   <CatOverview
     cat={cat}
     isDetail={true}

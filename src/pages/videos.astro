@@ -3,10 +3,12 @@ import MainLayout from "../layouts/MainLayout.astro";
 import VideosOverview from "../components/videos/VideosOverview.tsx";
 import { sanityClient } from "../sanity";
 import { videoGroqQuery } from "../utils/query";
+import { metadata } from "../utils/metadata";
 
 const videos = await sanityClient.fetch(videoGroqQuery({ page: 0 }));
+const meta = metadata.videos;
 ---
 
-<MainLayout title="Kattenparadijs">
+<MainLayout meta={meta}>
   <VideosOverview videos={videos} client:load />
 </MainLayout>
