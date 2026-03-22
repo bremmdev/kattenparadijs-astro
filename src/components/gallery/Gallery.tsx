@@ -98,7 +98,7 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                         width={selectedImage.width}
                         height={selectedImage.height}
                         alt="kat"
-                        className="object-contain"
+                        className="h-full w-full object-contain"
                     />
                 </Modal>
             )}

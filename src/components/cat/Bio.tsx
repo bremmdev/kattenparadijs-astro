@@ -83,7 +83,7 @@ const Bio = ({ cat, imageCount }: Props) => {
                         {cat.passingDate && <PassingIcon />}
                     </h2>
                     <img
-                        src="chevron.svg"
+                        src="/chevron.svg"
                         width="22px"
                         height="22px"
                         className={`md:hidden absolute right-8 top-4 translate-y-1 transition-all cursor-pointer ${isExpanded ? "rotate-180" : "rotate-0"
