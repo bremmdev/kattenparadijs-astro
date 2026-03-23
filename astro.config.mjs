@@ -10,7 +10,6 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   adapter: cloudflare(),
-
   fonts: [
     {
       provider: fontProviders.fontsource(),
@@ -24,7 +23,9 @@ export default defineConfig({
       cssVariable: "--font-poppins",
     },
   ],
-
+  security: {
+    csp: true,
+  },
   vite: {
     plugins: [tailwindcss()],
   },

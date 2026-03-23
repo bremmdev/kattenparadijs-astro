@@ -108,7 +108,7 @@ const Bio = ({ cat, imageCount }: Props) => {
 
             {banner && (
                 <img
-                    src={banner.src}
+                    src={banner}
                     alt={`${cat.name} banner`}
                     loading="eager"
                     fetchPriority="high"

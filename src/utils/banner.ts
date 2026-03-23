@@ -1,14 +1,10 @@
-import NorrisBanner from "../../public/norris_banner.webp";
-import DaantjeBanner from "../../public/daantje_banner.webp";
-import MoosBanner from "../../public/moos_banner.webp";
-import FlynnBanner from "../../public/flynn_banner.webp";
 import { type Cat } from "../types/types";
 
 const banners = {
-    daantje: DaantjeBanner,
-    flynn: FlynnBanner,
-    moos: MoosBanner,
-    norris: NorrisBanner,
+    daantje: '/daantje_banner.webp',
+    flynn: '/flynn_banner.webp',
+    moos: '/moos_banner.webp',
+    norris: '/norris_banner.webp',
 };
 
 export const getBanner = (cat?: Cat) => {
