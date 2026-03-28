@@ -5,10 +5,14 @@ import { sanityClient } from "../sanity";
 import { videoGroqQuery } from "../utils/query";
 import { metadata } from "../utils/metadata";
 
-const videos = await sanityClient.fetch(videoGroqQuery({ page: 0 }));
+const videosData = await sanityClient.fetch(videoGroqQuery({ page: 0 }));
 const meta = metadata.videos;
 ---
 
 <MainLayout meta={meta}>
-  <VideosOverview videos={videos} client:load />
+  <VideosOverview
+    videos={videosData.videos}
+    catVideoCount={videosData.count ?? 0}
+    client:load
+  />
 </MainLayout>

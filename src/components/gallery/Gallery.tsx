@@ -170,7 +170,6 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                         {isFetchingNextPage && <Spinner />}
                     </button>
                 </div>)}
-
         </>
     );
 };

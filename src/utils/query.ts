@@ -1,21 +1,21 @@
 import groq from 'groq';
-import { PAGE_SIZE } from './constants.ts';
+import { PAGE_SIZE, VIDEO_PAGE_SIZE } from './constants.ts';
 
 type GroqArgs = {
-    filter?: string;
-    page?: number;
+  filter?: string;
+  page?: number;
 };
 
 export const imageGroqQuery = (args: GroqArgs) => {
-    const { filter, page } = args;
+  const { filter, page } = args;
 
-    const queryFilter = `_type == "catimage"` + (filter ? ` && ${filter}` : "");
-    const range =
-        page || page === 0
-            ? `[${page * PAGE_SIZE}...${(page + 1) * PAGE_SIZE}]`
-            : "";
+  const queryFilter = `_type == "catimage"` + (filter ? ` && ${filter}` : "");
+  const range =
+    page || page === 0
+      ? `[${page * PAGE_SIZE}...${(page + 1) * PAGE_SIZE}]`
+      : "";
 
-    return groq`{
+  return groq`{
       "count": count(*[${queryFilter}]),  
       "images":
         *[${queryFilter}] | order(_createdAt desc)${range} {
@@ -38,19 +38,21 @@ export const catGroqQuery = groq`*[_type == "cat"]{
   }`;
 
 export const videoGroqQuery = (args: GroqArgs) => {
-    const { page } = args;
+  const { page } = args;
 
-    const range =
-        page || page === 0
-            ? `[${page * PAGE_SIZE}...${(page + 1) * PAGE_SIZE}]`
-            : "";
+  const range =
+    page || page === 0
+      ? `[${page * VIDEO_PAGE_SIZE}...${(page + 1) * VIDEO_PAGE_SIZE}]`
+      : "";
 
-    return groq`*[_type == "catvideo"] | order(_createdAt desc) {
+  return groq`{
+    "count": count(*[_type == "catvideo"]),
+    "videos": *[_type == "catvideo"] | order(_createdAt desc) {
       "cats": cat[]->{name, birthDate, "iconUrl": icon.asset->url, nicknames},
       "id":_id,
       "url":video.asset->url,
       width,
       height,
       takenAt
-    }${range}`;
+    }${range}}`;
 };
