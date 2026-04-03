@@ -6,6 +6,7 @@ import {
     isSignatureError,
     SIGNATURE_HEADER_NAME,
 } from "@sanity/webhook";
+import { env } from "cloudflare:workers";
 
 // Manually call assertValidSignature as validateSignature is stubbed out in Cloudflare Workers environment
 async function safeIsValidSignature(
@@ -23,8 +24,8 @@ async function safeIsValidSignature(
 }
 
 export const POST: APIRoute = async ({ request }) => {
-    const secret = import.meta.env.WEBHOOK_SECRET;
-    const githubToken = import.meta.env.GITHUB_TOKEN;
+    const secret = env.WEBHOOK_SECRET;
+    const githubToken = env.GITHUB_TOKEN;
     const signature = request.headers.get(SIGNATURE_HEADER_NAME) || "";
     const rawBody = await request.text();
 
