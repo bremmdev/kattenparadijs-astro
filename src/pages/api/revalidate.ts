@@ -28,6 +28,16 @@ export const POST: APIRoute = async ({ request }) => {
     const signature = request.headers.get(SIGNATURE_HEADER_NAME) || "";
     const rawBody = await request.text();
 
+    if (!secret || !githubToken) {
+        console.error("Missing required environment variables for revalidation", {
+            hasWebhookSecret: Boolean(secret),
+            hasGithubToken: Boolean(githubToken),
+        });
+        return new Response("Missing required environment variables", {
+            status: 500,
+        });
+    }
+
     const isValid = await safeIsValidSignature(rawBody, signature, secret);
 
     if (!isValid) {
