@@ -4,20 +4,17 @@
   "keep_vars": true,
   "name": "kattenparadijs-astro",
   "main": "@astrojs/cloudflare/entrypoints/server",
-  "secrets": {
-    "required": ["WEBHOOK_SECRET", "GITHUB_TOKEN"]
-  },
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
   },
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
   "routes": [
     {
       "pattern": "kattenparadijs.bremmdev.me",
-      "custom_domain": true
-    }
-  ]
+      "custom_domain": true,
+    },
+  ],
 }
