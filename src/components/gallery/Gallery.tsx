@@ -6,9 +6,10 @@ import SelectRandomCat from "./SelectRandomCat.tsx";
 import useHandleClickOutsideImage from "../../hooks/useHandleClickOutsideImage.tsx";
 import { sortImagesIntoColumns } from "../../utils/sortIntoColumns.ts";
 import Spinner from "../UI/Spinner.tsx";
-import { type Cat } from "../../types/types";
+import { type Cat, type SimilarCatPhotoWithDimensions } from "../../types/types";
 import CatCount from "./CatCount.tsx";
 import { PAGE_SIZE } from "../../utils/constants.ts";
+import SimilarCatsModal from "../UI/SimilarCatsModal.tsx";
 
 type Props = {
     cat: Cat | null;
@@ -36,6 +37,7 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
     >(() => sortImagesIntoColumns(images, 4));
     const [page, setPage] = React.useState(0);
     const [isFetchingNextPage, setIsFetchingNextPage] = React.useState(false);
+    const [similarImages, setSimilarImages] = React.useState<Array<SimilarCatPhotoWithDimensions>>([]);
 
     const hasMoreImages = (page + 1) * PAGE_SIZE < catImageCount;
 
@@ -59,7 +61,7 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
         setIsFetchingNextPage(true);
         const catParam = cat === null ? "" : `&cat=${cat?.name ?? "all"}`;
         const nextImages = await fetch(`/api/images?page=${page + 1}${catParam}`);
-        const data = await nextImages.json();
+        const data = await nextImages.json() as { images: Array<ImageWithDimensions> };
         const newImages = [...allImages, ...data.images];
         setPage(page + 1);
         setAllImages(newImages);
@@ -85,9 +87,12 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
         return lcpImage.id;
     }
 
+    const handleClearSimilarImages = () => {
+        setSimilarImages([]);
+    };
+
     const mobileLCPImageId = getLCPImageId(columnsMobile);
     const desktopLCPImageId = getLCPImageId(columnsDesktop);
-
 
     return (
         <>
@@ -101,6 +106,10 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                         className="h-full w-full object-contain"
                     />
                 </Modal>
+            )}
+
+            {similarImages.length > 0 && (
+                <SimilarCatsModal images={similarImages} onClose={handleClearSimilarImages} />
             )}
 
             {!isDetail && (
@@ -131,6 +140,7 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                                 key={img.id}
                                 img={img}
                                 isLCP={img.id === mobileLCPImageId && useLCPImage}
+                                onSimilarImages={setSimilarImages}
                                 setSelectedImage={setSelectedImage}
                             />
                         ))}
@@ -152,6 +162,7 @@ const Gallery = ({ cat, isDetail, images, catImageCount }: Props) => {
                                 key={img.id}
                                 img={img}
                                 isLCP={img.id === desktopLCPImageId && useLCPImage}
+                                onSimilarImages={setSimilarImages}
                                 setSelectedImage={setSelectedImage}
                             />
                         ))}

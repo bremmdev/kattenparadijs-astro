@@ -4,6 +4,7 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import Header from "../components/layout/Header.astro";
 import BackToTop from "../components/UI/BackToTop.tsx";
+import Toaster from "../components/UI/Toaster.tsx";
 
 const { meta } = Astro.props;
 ---
@@ -33,5 +34,6 @@ const { meta } = Astro.props;
       <slot />
     </main>
     <BackToTop client:load />
+    <Toaster client:load />
   </body>
 </html>

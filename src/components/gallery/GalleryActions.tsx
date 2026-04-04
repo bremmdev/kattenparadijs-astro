@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { intervalToDuration } from "date-fns";
 import { differenceInCalendarDays } from "date-fns";
 import { Info, Sparkles } from "lucide-react";
-// import { getSimilarCatPhotos } from "@/app/_actions/similar-cats";
+import { actions } from 'astro:actions';
 import { type SimilarCatPhoto, type SimilarCatPhotoWithDimensions } from "../../types/types";
 import { getImageDimensions } from "../../utils/images";
-// import { toast } from "@/utils/toast";
+import { toast } from "../../utils/toast";
 
 type Props = {
     isLongPress: boolean;
@@ -41,32 +41,43 @@ const determineAge = (takenAt: string, birthDate: string) => {
     return `${numberOfYears}${months} ${months === 1 ? "maand" : "maanden"}`;
 };
 
+// preload similar images to avoid layout shift
+const preloadImage = (src: string) =>
+    new Promise<void>((resolve) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = () => resolve();
+        image.src = src;
+    });
+
 export default function GalleryActions(props: Props) {
     const { isLongPress, takenAt, birthDate, isVideo, isMultipleCats, imageUrl, id, onSimilarImages, cat } = props;
 
     const [showInfo, setShowInfo] = useState<boolean>(false);
 
     const handleFindSimilarImages = async () => {
-        return
-        // if (!imageUrl || !id || !cat || isMultipleCats) return;
-        // const loadingId = toast.loading("Finding similar cat images...");
-        // const { data: similarPhotos, error } = await getSimilarCatPhotos(imageUrl, cat);
+        if (!imageUrl || !id || !cat || isMultipleCats) return;
+        const loadingId = toast.loading("Finding similar cat images...");
+        const { data: similarPhotos, error } = await actions.getSimilarCatPhotos({ url: imageUrl, cat });
 
-        // if (error) {
-        //     toast.error(error);
-        //     return;
-        // }
+        if (error) {
+            toast.error(error.message);
+            return;
+        }
 
-        // toast.remove(loadingId);
+        const formattedSimilarPhotos = similarPhotos.value.map((photo: SimilarCatPhoto) => ({
+            ...photo,
+            width: getImageDimensions(photo.imageUrl)?.width ?? 0,
+            height: getImageDimensions(photo.imageUrl)?.height ?? 0,
+        }));
 
-        // const formattedSimilarPhotos = similarPhotos.value.map((photo: SimilarCatPhoto) => ({
-        //     ...photo,
-        //     width: getImageDimensions(photo.imageUrl)?.width,
-        //     height: getImageDimensions(photo.imageUrl)?.height,
-        // }))
+        await Promise.all(
+            formattedSimilarPhotos.map((photo) => preloadImage(photo.imageUrl))
+        );
 
-        // onSimilarImages?.(formattedSimilarPhotos);
-    }
+        onSimilarImages?.(formattedSimilarPhotos);
+        toast.remove(loadingId);
+    };
 
     //format date and determine age
     //formattedAge is bogus when birthDate is null but it's not used in that case
