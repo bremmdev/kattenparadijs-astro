@@ -5,6 +5,9 @@ on:
   repository_dispatch:
     types: [cms-update]
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: cms-rebuild

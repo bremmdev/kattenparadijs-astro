@@ -67,7 +67,7 @@ const GalleryItem = (props: Props) => {
                     width={img.width / 2}
                     height={img.height / 2}
                     alt="kat"
-                    className="rounded-xl"
+                    className="rounded-xl animate-fade"
                     loading={hasPriority ? "eager" : "lazy"}
                     fetchPriority={isLCP ? "high" : "auto"}
                 />
