@@ -8,8 +8,8 @@ export async function getSimilarImages({ url, cat }: { url: string, cat: string 
 
     try {
         // Use CF env in production, local env in development
-        const AZURE_SEARCH_ENDPOINT = env.AZURE_SEARCH_ENDPOINT ?? import.meta.env.AZURE_SEARCH_ENDPOINT;
-        const AZURE_SEARCH_ADMIN_KEY = env.AZURE_SEARCH_ADMIN_KEY ?? import.meta.env.AZURE_SEARCH_ADMIN_KEY;
+        const AZURE_SEARCH_ENDPOINT = env.AZURE_SEARCH_ENDPOINT!
+        const AZURE_SEARCH_ADMIN_KEY = env.AZURE_SEARCH_ADMIN_KEY!
 
         const res = await fetch(
             `${AZURE_SEARCH_ENDPOINT}/indexes/${INDEX_NAME}/docs/search?api-version=2025-09-01`,
