@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "13.1.1",
-    "@astrojs/react": "^5.0.1",
+    "@astrojs/react": "^5.0.5",
     "@sanity/client": "^7.17.0",
     "@sanity/webhook": "^4.0.4",
     "@tailwindcss/vite": "^4.2.1",
@@ -23,7 +23,7 @@
     "@types/react-dom": "^19.2.3",
     "astro": "^6.0.4",
     "date-fns": "^4.1.0",
-    "groq": "^5.16.0",
+    "groq": "^5.25.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.6",
     "react-confetti": "^6.4.0",
