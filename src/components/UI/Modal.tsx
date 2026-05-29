@@ -14,6 +14,10 @@ const Modal = (props: Props) => {
             }
         };
         window.addEventListener("keydown", handleEscapeKey);
+
+        return () => {
+            window.removeEventListener("keydown", handleEscapeKey);
+        };
     }, [props.onClose]);
 
     // Prevent scrolling on modal open

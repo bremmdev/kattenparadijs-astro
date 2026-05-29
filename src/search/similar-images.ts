@@ -20,7 +20,7 @@ export async function getSimilarImages({ url, cat }: { url: string, cat: string 
                     "api-key": AZURE_SEARCH_ADMIN_KEY!,
                 },
                 body: JSON.stringify({
-                    filter: `catName eq '${cat}'`,
+                    filter: `catName eq '${cat.replace(/'/g, "''")}'`,
                     vectorQueries: [
                         {
                             kind: "vector",
